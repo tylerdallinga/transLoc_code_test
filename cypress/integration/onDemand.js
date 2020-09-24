@@ -9,7 +9,7 @@ describe('OnDemand app tests', function () {
         cy.logout()
     })
     
-//1. As a user, I should be able to sign in to my account and also be able to logout
+//1. As a user, I should be able to sign into my account and also be able to logout
 
     it('Should log me in and out and back in again', function(){
        cy.login(data.users.Username.test1, data.users.password.test1) //login with email
