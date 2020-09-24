@@ -36,6 +36,9 @@ module.exports = {
         },
         dropoff: {
             rider1: "Starbucks Slater Road, Drh",
+        },
+        searchData: {
+            data1: "John Doe"
         }
     }
 
