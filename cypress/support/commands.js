@@ -89,3 +89,14 @@ Cypress.Commands.add('newRideAccount', (service, first, last, phone, riders, whe
     cy.get('.Header_logo_S0SNC')
     .should('be.visible')
 })
+
+Cypress.Commands.add('searchRide', (searchData, firstName, lastName, pickup) =>{
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div.PageLayout_content_31BMm > div > div:nth-child(1) > div > div > div:nth-child(2) > div > div:nth-child(2) > div > div > input')
+    .type(searchData)
+
+    cy.get('div [data-id=ride-name]').eq(1)
+    .should('have.text', firstName + " " + lastName)
+    
+    cy.get('div [data-id=ride-pickup-address]').eq(1)
+    .should('have.text', pickup)
+})
