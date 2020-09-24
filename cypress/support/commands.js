@@ -28,6 +28,7 @@ Cypress.Commands.add('login', (username, password) =>{
     cy.get('#username')
     .type(username)
     .should('have.value',username)
+    .wait(2000)
 
     cy.get('#password')
     .type(password)
@@ -50,5 +51,41 @@ Cypress.Commands.add('logout',() =>{
      })
 
     cy.url()
-    .should('include','https://login.transloc.com/login') //think this is a bug, it is missing the "stage" in the url when you log out so I changed the url to reflect the change.
+    .should('include','https://login.transloc.com/login')
+    
+    cy.visit('https://login.stage.transloc.com/login/?next=https://ondemand.stage.transloc.com/admin') //had to add this step do to a bug found in the href of the the log out link that points to prod instead of stage 
+})
+
+
+Cypress.Commands.add('newRideAccount', (service, first, last, phone, riders, wheelchair, note, pickup, dropoff,) =>{
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div.PageLayout_content_31BMm > button')
+    .click()
+    .wait(1000)
+
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(2) > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR')
+    .click()
+    .type(service)
+    .type('{enter}')
+
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(4) > div:nth-child(1) > div > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR').type(first)
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(4) > div:nth-child(2) > div > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR').type(last)
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(5) > div:nth-child(1) > div > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR').type(phone)
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(5) > div:nth-child(2) > div > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR').type(riders).type('{enter}')
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(6) > div.FormField_children_1SmtD.RideEditor_childClass_3O1oR > span').trigger(wheelchair)
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div:nth-child(7) > div > div > textarea:nth-child(1)').type(note)
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div.RideEditor_addresses_1ZmgC > div.RideEditor_pickup_1EMGG > div > input').type(pickup).should('have.value', pickup)
+    cy.get('#react-autowhatever-1').click()
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div.RideEditor_addresses_1ZmgC > div.RideEditor_dropoff_1zXP5 > div > input').type(dropoff).should('have.value', dropoff)
+    .wait(1500)
+    cy.get('.RideEditor_suggestionsContainer_3oLKT').eq(1).click() // sleecting the first dropdown item on dropoffs dropdown
+
+    cy.get('#app > div > div > div.Content_root_2fPyW > div > div > div > div > div.RideEditor_editorColumn_yVp2e > div.RideEditor_actions_1XHiA > button > span.MuiButton-label')
+    .click()
+    .wait(5000)
+
+    cy.get('button').eq(1) //click the return to rides button
+    .click()
+
+    cy.get('.Header_logo_S0SNC')
+    .should('be.visible')
 })
